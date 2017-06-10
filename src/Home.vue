@@ -1,12 +1,17 @@
-<template lang="pug">
-  #app
-    img(src='dist/logo.png')
-    h1 Vue FM x
-    select(v-model="selectedCountry")
-      option(v-for="country in countries" v-bind:value="country.value") {{country.name}}
-    spinner(v-show="loading")
-    ul.artistas
-      artist(v-for='artist in artists' v-bind:artist="artist" v-bind:key="artist.mbid")
+<template>
+  <div id="app">
+    <spinner v-show="loading"></spinner>
+    <paginate v-if="!loading"
+      name="languages"
+      :list="langs"
+      :per="2"
+    >
+      <li v-for="lang  in paginated('languages')">
+        {{ lang  }}
+      </li>
+    </paginate>
+    <paginate-links for="languages" :async="true" ></paginate-links>
+  </div>
 </template>
 <script>
 import Spinner from './components/Spinner.vue'
@@ -16,46 +21,24 @@ export default {
   name: 'app',
   data () {
     return {
-      artists:[],
-      countries:[
-        {name:'Argentina',value:'argentina'},
-        {name:'Colombia',value:'colombia'},
-        {name:'España',value:'spain'}        
-      ],
-      selectedCountry:'argentina',
-      loading:true
+      loading:true,
+      langs: ['JavaScript', 'PHP', 'HTML', 'CSS', 'Ruby', 'Python', 'Erlang'],
+      paginate: ['languages']
     }
   },
   components:{
-    Artist,
     Spinner
   },
-  methods:{
-    refreshArtist(){
-        const self = this
-        this.loading = true
-        this.artists = []
-        getArtists(this.selectedCountry)
-          .then(function(artists){
-            self.artists = artists
-            self.loading = false
-          })
-    }
-  },
-  watch:{
-    selectedCountry:function(){
-      this.refreshArtist();
-    }
-  },
-  mounted:function(){
-      this.refreshArtist();    
+  mounted () {
+    setTimeout(() => {
+      this.loading = false
+    }, 1000)
   }
 }
 </script>
 
 <style lang="stylus">
 #app
-  font-family 'Avenir', Helvetica, Arial, sans-serif
   -webkit-font-smoothing antialiased
   -moz-osx-font-smoothing grayscale
   text-align center

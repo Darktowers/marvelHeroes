@@ -1,16 +1,16 @@
 import config from './config'
 const CryptoJS = require("crypto-js");
-const apiKey = config.apiKey
-const apiKey2 = config.apiKey2
-const priKey = config.priv
+const API_KEY = config.API_KEY
+const PRIV_KEY = config.PRIV_KEY
 
 let ts = new Date().getTime();
-let hash = CryptoJS.MD5(ts + priKey + apiKey2).toString();
+let hash = CryptoJS.MD5(ts + PRIV_KEY + API_KEY).toString();
 
-const URL = `https://ws.audioscrobbler.com/2.0/?method=geo.gettopartists&country=:country&api_key=${apiKey}&format=json`
-const HEROES = `https://gateway.marvel.com:443/v1/public/characters?ts=${ts}&apikey=${apiKey2}&hash=${hash}`
+let HEROES = `https://gateway.marvel.com:443/v1/public/characters?limit=:limit&offset=:offset&ts=${ts}&apikey=${API_KEY}&hash=${hash}`
 
-export default function getHeroes(){
+export default function getHeroes(limit,offset){
+    HEROES = HEROES.replace(':limit', limit)
+    HEROES = HEROES.replace(':offset', offset)    
     return fetch(HEROES)
         .then(res => res.json())
         .then(json => json.data.results)

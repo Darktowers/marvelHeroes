@@ -3,9 +3,9 @@ import vueRouter from 'vue-router'
 import App from './App.vue'
 import Heroes from './Heroes.vue'
 import Home from './Home.vue'
+import VuePaginate from 'vue-paginate'
 
-
-
+Vue.use(VuePaginate)
 Vue.use(vueRouter);
 const routes = [
   { path: '/heroes', component: Heroes },
