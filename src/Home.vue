@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <router-link to="/heroes">Go to heroes</router-link>
     <spinner v-show="loading"></spinner>
     <paginate v-if="!loading"
       name="languages"
