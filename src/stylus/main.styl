@@ -1,0 +1,202 @@
+rojo = #ec1d23
+font-size = 16px;
+line-height = 1;
+lines-to-show = 2;
+.blur
+  -webkit-filter: blur(5px);
+  filter: blur(5px);
+.btn
+  color white
+  font-weight bold
+  padding 1em
+  border 0
+  margin-top 1em
+  transition all .3s ease-in-out
+  cursor pointer
+  &-red
+    background rojo
+    &:hover
+      background #D32F2F
+.main-wrap
+  display: flex;
+  max-width: 100%;
+  .titleContainer
+    display: flex;
+    align-items: center;
+    img
+      margin-right: 1em;
+  h2
+    letter-spacing 2px
+    color #3d3332
+  .col1
+    width 80% 
+    padding-left:1em;     
+  .col2
+    width 20%
+#heroes
+  .heroesComp
+    display: flex;
+    list-style: none;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    li
+      a
+        padding: 1em;
+        display: block;
+      &.number
+        color: #c5c1c2;
+        width: 50px;
+        height: 50px;
+        text-align: center;
+        padding: 0;
+        box-shadow: 2px 2px 5px 0px #BDBDBD;
+        margin: .5em;
+        background: white;
+        cursor: pointer;
+        transition all .3s ease-in-out
+        &:hover
+          background: rojo;
+          color: white;
+          box-shadow: 2px 2px 5px 0px #E0E0E0;
+        &.active
+          background: white;
+          color: black;
+          box-shadow: 2px 2px 5px 0px #E0E0E0;
+      
+  .heroesContainer
+    display flex
+    flex-wrap: wrap
+    justify-content: space-around;
+    .hero
+      background: white;
+      padding: 0 1.5em 3em 1.5em;
+      max-width: 430px;
+      width: 100%;
+      color: #463e3c;
+      margin: 1.4em;
+      .comics
+        h3
+          color: #796d6d;
+        &-container
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          justify-content: space-between;
+          height: 80px;
+          overflow: overlay;
+          padding-right: .8em;
+          li
+            list-style: none;
+            .comic
+              color: inherit;
+              text-decoration: none;
+              width: 170px;
+              display: inline-block;
+              margin: 0 .5em .5em 0;
+              transition all .3s ease-in-out
+              display: block; /* Fallback for non-webkit */
+              display: -webkit-box;
+              height: font-size*line-height*lines-to-show; /* Fallback for non-webkit */
+              font-size: font-size;
+              line-height: line-height;
+              -webkit-line-clamp: lines-to-show;
+              -webkit-box-orient: vertical;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              &:hover
+                color rojo
+      &-container
+        display: flex;
+        position: relative;
+        min-height: 180px;
+        .hero-image
+          position: absolute;
+          width: 200px;
+          height: 200px;
+          border-radius: 50%;
+          overflow: hidden;
+          left: -3em;
+          top: -1em;
+          box-shadow: 2px 1px 5px 1px #afa8ab;
+          img
+            position: absolute;
+            height: 100%;
+        &-description
+          width: 100%;
+          margin-left: 10em;
+          position: relative;
+          top: -1.8em;
+          min-height: 316px;
+          .title
+            margin: .5em 0;
+          .description
+            margin: 0;
+  .modalContainer
+    position fixed
+    top 0
+    left 0
+    width 100%
+    z-index 1
+    display flex
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background: rgba(49, 46, 46, 0.79);
+    .modal
+      max-width 550px
+      position relative
+      z-index 1
+      background white
+      width 100%
+      box-shadow: 0 8px 13px 0px rgba(43, 43, 43, 0.53)
+      .closeModal
+        position: absolute;
+        right: .8em;
+        top: .8em;
+        width: 18px;
+        cursor pointer
+        img
+          width: 100%;
+      .buttons
+        .btn
+          width 50%;
+          padding: 1em;
+          color #3d3333
+          text-transform uppercase
+          font-weight bold
+          font-family: 'Roboto'
+          &-favoritos
+            background: #eceeee;
+          img
+            display: inline-block;
+            vertical-align: middle;
+            max-width: 30px;
+      .content
+        display flex
+        padding .5em 1em 0 1em
+        .col
+          width: 60%;
+          &:first-child
+            width: 40%;
+            min-width: 200px;
+          &:last-child
+            margin: 0 1em;
+          .title
+            text-transform uppercase
+          .description
+            font-weight: lighter;
+            font-size: 13px;
+          .image
+            max-width: 200px;
+            position relative
+            min-height: 300px;
+            margin 0 auto
+            margin-top: 1.2em;
+            overflow hidden
+            img
+              position absolute
+              height 100%
+
+
+

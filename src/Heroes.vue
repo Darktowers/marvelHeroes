@@ -1,6 +1,26 @@
 <template>
     <div id="heroes">
         <spinner v-show="loading"></spinner>
+        <div v-if="showModal" class="modalContainer">
+          <div class="modal">
+            <div @click="cerrarComic" class="closeModal"><img src="src/assets/btn-close.png" alt=""></div>
+            <spinner v-show="loadingComic"></spinner>
+            <div class="content">
+              <div class="col">
+                <div class="image">
+                  <img :src="comic[0].images[0].path+'.'+comic[0].images[0].extension" alt="">                
+                </div>
+              </div>
+              <div class="col">
+                <h3 class="title">{{comic[0].title}}</h3>
+                <p clas="description">{{comic[0].description}}</p>
+              </div>
+            </div>
+            <div class="buttons">
+              <button class="btn btn-favoritos"><img src="src/assets/btn-favourites-default.png" alt=""> Add to favourites</button><button class="btn btn-buy"><img src="src/assets/shopping-cart-primary.png" alt=""> Buy for $ {{comic[0].prices[0].price}}</button>
+            </div>
+          </div>
+        </div>
         <div class="main-wrap">
         <div class="col1">
           <div class="titleContainer">
@@ -30,7 +50,7 @@
                         <h3>Related comics</h3>
                         <div class="comics-container">
                           <li v-for="comic in hero.comics.items">
-                            <a href="" class="comic" :data-comic="comic.resourceURI" >{{comic.name}}</a>              
+                            <a href="" @click="mostrarComic" class="comic" :data-comic="comic.resourceURI" >{{comic.name}}</a>              
                           </li>
                         </div>
                       </div>
@@ -65,149 +85,23 @@
     </div>
 </template>
 <style lang="stylus">
-rojo = #ec1d23
-font-size = 16px;
-line-height = 1;
-lines-to-show = 2;
-.btn
-  color white
-  font-weight bold
-  padding 1em
-  border 0
-  margin-top 1em
-  transition all .3s ease-in-out
-  cursor pointer
-  &-red
-    background rojo
-    &:hover
-      background #D32F2F
-.main-wrap
-  display: flex;
-  max-width: 100%;
-  .titleContainer
-    display: flex;
-    align-items: center;
-    img
-      margin-right: 1em;
-  h2
-    letter-spacing 2px
-    color #3d3332
-  .col1
-    width 80% 
-    padding-left:1em;     
-  .col2
-    width 20%
-#heroes
-  .heroesComp
-    display: flex;
-    list-style: none;
-    padding: 0;
-    align-items: center;
-    justify-content: center;
-    li
-      a
-        padding: 1em;
-        display: block;
-      &.number
-        color: #c5c1c2;
-        width: 50px;
-        height: 50px;
-        text-align: center;
-        padding: 0;
-        box-shadow: 2px 2px 5px 0px #BDBDBD;
-        margin: .5em;
-        background: white;
-        cursor: pointer;
-        transition all .3s ease-in-out
-        &:hover
-          background: rojo;
-          color: white;
-          box-shadow: 2px 2px 5px 0px #E0E0E0;
-        &.active
-          background: white;
-          color: black;
-          box-shadow: 2px 2px 5px 0px #E0E0E0;
-      
-  .heroesContainer
-    display flex
-    flex-wrap: wrap
-    justify-content: space-around;
-    .hero
-      background: white;
-      padding: 0 1.5em 3em 1.5em;
-      max-width: 430px;
-      width: 100%;
-      color: #463e3c;
-      margin: 1.4em;
-      .comics
-        h3
-          color: #796d6d;
-        &-container
-          display: flex;
-          flex-wrap: wrap;
-          align-items: center;
-          justify-content: space-between;
-          li
-            list-style: none;
-            .comic
-              color: inherit;
-              text-decoration: none;
-              width: 170px;
-              display: inline-block;
-              margin: 0 .5em .5em 0;
-              transition all .3s ease-in-out
-              display: block; /* Fallback for non-webkit */
-              display: -webkit-box;
-              height: font-size*line-height*lines-to-show; /* Fallback for non-webkit */
-              font-size: font-size;
-              line-height: line-height;
-              -webkit-line-clamp: lines-to-show;
-              -webkit-box-orient: vertical;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              &:hover
-                color rojo
-      &-container
-        display: flex;
-        position: relative;
-        min-height: 180px;
-        .hero-image
-          position: absolute;
-          width: 200px;
-          height: 200px;
-          border-radius: 50%;
-          overflow: hidden;
-          left: -3em;
-          top: -1em;
-          box-shadow: 2px 1px 5px 1px #afa8ab;
-          img
-            position: absolute;
-            height: 100%;
-        &-description
-          width: 100%;
-          margin-left: 10em;
-          position: relative;
-          top: -1.8em;
-          .title
-            margin: .5em 0;
-          .description
-            margin: 0;
-    
-
+@import "stylus/main.styl"
 </style>
 <script>
 import Spinner from './components/Spinner.vue'
-
-import getHeroes from './api'
+import api from './api'
 export default {
   name: 'heroes',
   data () {
     return {
       heroes:[],
       loading:true,
+      loadingComic:true,      
       offset:0,
       limit:100,
-      paginate: ['heroesComp']
+      paginate: ['heroesComp'],
+      comic:'',
+      showModal: false
     }
   },
   components:{
@@ -218,12 +112,40 @@ export default {
         const self = this
         this.loading = true
         this.heroes = []
-        getHeroes(this.limit,this.offset)
+        api.getHeroes(this.limit,this.offset)
           .then(function(heroes){
             self.heroes = heroes
             self.loading = false
           })
-    }
+    },
+    mostrarComic(item){
+      item.preventDefault();
+      let main = document.getElementsByClassName('main-wrap');
+      let header = document.getElementsByClassName('header');
+      header[0].classList.add("blur");            
+      main[0].classList.add("blur");      
+      this.showModal = true;
+      const self = this;
+      this.comic = [];
+      this.loadingComic = true;            
+      let itemx = item.currentTarget;
+      let comic = itemx.getAttribute("data-comic");
+      api.getComic(comic)
+          .then(function(returnComic){
+            self.comic = returnComic
+            self.loadingComic = false
+          })
+    },
+    cerrarComic(item){
+      item.preventDefault();
+      let main = document.getElementsByClassName('main-wrap');
+      let header = document.getElementsByClassName('header');
+      header[0].classList.remove("blur");            
+      main[0].classList.remove("blur");      
+      this.showModal = false;
+      this.comic = [];
+    },
+
   },
   watch:{
     selectedCountry:function(){
