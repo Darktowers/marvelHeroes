@@ -1,6 +1,6 @@
 {
-  "name": "vuefm",
-  "description": "Proyecto realizado con Vue consumiendo el api de FM",
+  "name": "marveheroes",
+  "description": "Proyecto realizado con Vue consumiendo el api de Marvel",
   "version": "1.0.0",
   "author": "Cristian Andres Arrieta",
   "private": true,
