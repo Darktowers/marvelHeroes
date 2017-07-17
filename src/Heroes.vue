@@ -1,5 +1,12 @@
 <template>
     <div id="heroes">
+        <header class="header">
+            <img class="header-logo" src="src/assets/marvel.svg" alt="">
+            <div class="header-search">
+              <input v-model="search" type="text" class="header-search-input" placeholder="Search character...">
+              <i class="fa fa-search" aria-hidden="true"></i>
+            </div>
+        </header>
         <spinner v-show="loading"></spinner>
         <div v-if="showModal" class="modalContainer">
           <div class="modal">
@@ -101,7 +108,9 @@ export default {
       limit:100,
       paginate: ['heroesComp'],
       comic:'',
-      showModal: false
+      showModal: false,
+      search:'',
+      backHeroes:[]
     }
   },
   components:{
@@ -112,9 +121,11 @@ export default {
         const self = this
         this.loading = true
         this.heroes = []
+        this.backHeroes = []
         api.getHeroes(this.limit,this.offset)
           .then(function(heroes){
             self.heroes = heroes
+            self.backHeroes = heroes
             self.loading = false
           })
     },
@@ -124,7 +135,6 @@ export default {
       let header = document.getElementsByClassName('header');
       header[0].classList.add("blur");            
       main[0].classList.add("blur");      
-      this.showModal = true;
       const self = this;
       this.comic = [];
       this.loadingComic = true;            
@@ -134,6 +144,8 @@ export default {
           .then(function(returnComic){
             self.comic = returnComic
             self.loadingComic = false
+            self.showModal = true;
+            
           })
     },
     cerrarComic(item){
@@ -148,8 +160,18 @@ export default {
 
   },
   watch:{
-    selectedCountry:function(){
-      this.refreshHeroes();
+    search(newEl, oldEl){
+      if(newEl == ""){
+        this.heroes = this.backHeroes; 
+      }else{
+        let newHeroes = [];
+        this.heroes.filter(function(hero){
+          if(hero.name.toLowerCase().indexOf(newEl.toLowerCase())>=0){
+            newHeroes.push(hero);
+          }
+        });
+        this.heroes = newHeroes;
+      }
     }
   },
   mounted:function(){

@@ -1,6 +1,7 @@
-# vuefm
+# Marvel Heroes
 
-> Vue Fm
+> Marvel Heroes
+> Desarrollado con VueJS
 
 ## Build Setup
 
