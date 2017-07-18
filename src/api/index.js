@@ -2,7 +2,6 @@ import config from './config'
 const CryptoJS = require("crypto-js");
 const API_KEY = config.API_KEY
 const PRIV_KEY = config.PRIV_KEY
-
 let ts = new Date().getTime();
 let hash = CryptoJS.MD5(ts + PRIV_KEY + API_KEY).toString();
 let RESTURL = `&ts=${ts}&apikey=${API_KEY}&hash=${hash}`;
@@ -20,19 +19,9 @@ const funcs = {
     getComic(comicURL) {
         COMIC = `${comicURL}?${RESTURL}`;
         COMIC =  COMIC.replace('http://gateway.marvel.com/', validURL);
-        // HEROES = HEROES.replace(':limit', limit)
-        // HEROES = HEROES.replace(':offset', offset)
         return fetch(COMIC)
             .then(res => res.json())
             .then(json => json.data.results)
-    },
-    baz() { funcs.foo(); funcs.bar() } // here is the fix
+    } // here is the fix
 }
 export default funcs;
-
-// export default function getArtists(country){
-//     const url = URL.replace(':country', country)
-//     return fetch(url)
-//         .then(res => res.json())
-//         .then(json => json.topartists.artist)
-// }
